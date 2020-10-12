@@ -6,7 +6,10 @@ function init(){
 player.locX = Math.floor(500*Math.random()+10);
 player.locY = Math.floor(500*Math.random()+10);
 function draw(){
-
+        //FIX:ONE 
+   //wipe the entire canvas out     
+   //every time we draw new frame, we are going to wipe everything out we start 
+   context.clearRect(0,0,canvas.width, canvas.height);
 
     context.beginPath();
     context.fillStyle='rgb(255,0,0)';

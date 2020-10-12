@@ -6,14 +6,27 @@ function init(){
 player.locX = Math.floor(500*Math.random()+10);
 player.locY = Math.floor(500*Math.random()+10);
 function draw(){
-        //FIX:ONE 
-   //wipe the entire canvas out     
-   //every time we draw new frame, we are going to wipe everything out we start 
+    //FIX:ONE 
+    //wipe the entire canvas out     
+    //every time we draw new frame, we are going to wipe everything out we start 
+    //clear the screen out so the old stuff is gone from the last frame. 
    context.clearRect(0,0,canvas.width, canvas.height);
 
+   //reset the translation back to defualt;
+
+    context.setTransform(1,0,0,1,0,0);
+    //calmp the camera to the player
+    const camX = -player.locX + canvas.width/2;
+    const camY = -player.locY + canvas.height/2;
+    
+    //translate allows us to move the canvas around
+
+    context.translate(camX, camY);
+    
     context.beginPath();
     context.fillStyle='rgb(255,0,0)';
     context.arc(player.locX,player.locY,10,0,Math.PI*2);
+    context.arc(200,200,10,0,Math.PI*2);
     context.fill();
     context.lineWith=3;
     context.strokeStyle = 'rgb(0,255,0)';

@@ -6,6 +6,8 @@ function init(){
 player.locX = Math.floor(500*Math.random()+10);
 player.locY = Math.floor(500*Math.random()+10);
 function draw(){
+
+ 
     //FIX:ONE 
     //wipe the entire canvas out     
     //every time we draw new frame, we are going to wipe everything out we start 
@@ -19,18 +21,26 @@ function draw(){
     const camX = -player.locX + canvas.width/2;
     const camY = -player.locY + canvas.height/2;
     
-    //translate allows us to move the canvas around
+    orbs.forEach((orb)=>{
+        context.beginPath();
+        context.fillStyle = orb.color;
+        context.arc(orb.locX,orb.locY,orb.radius, 0, Math.PI*2);
+        context.fill();
+   });
 
+    //translate allows us to move the canvas around
+ 
     context.translate(camX, camY);
     
     context.beginPath();
     context.fillStyle='rgb(255,0,0)';
     context.arc(player.locX,player.locY,10,0,Math.PI*2);
-    context.arc(200,200,10,0,Math.PI*2);
+    // context.arc(200,200,10,0,Math.PI*2);
     context.fill();
     context.lineWith=3;
     context.strokeStyle = 'rgb(0,255,0)';
     context.stroke();
+
     //recursivly call function forever every new frame 
     requestAnimationFrame(draw);
 

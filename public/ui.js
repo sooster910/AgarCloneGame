@@ -4,7 +4,9 @@ console.log('ui check')
 let wHeight = $(window).height();
 let wWidth = $(window).width();
 let player = {};
+let orb = [];
 
+//create canvas
 let canvas = document.querySelector('#the-canvas');
 let context =  canvas.getContext('2d');
 canvas.width = wWidth;

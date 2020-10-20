@@ -8,25 +8,21 @@ player.locY = Math.floor(500*Math.random()+10);
 function draw(){
 
  
-    //FIX:ONE 
+
+
+   //reset the translation back to defualt;
+    context.setTransform(1,0,0,1,0,0);
+
+        //FIX:ONE 
     //wipe the entire canvas out     
     //every time we draw new frame, we are going to wipe everything out we start 
     //clear the screen out so the old stuff is gone from the last frame. 
    context.clearRect(0,0,canvas.width, canvas.height);
 
-   //reset the translation back to defualt;
-
-    context.setTransform(1,0,0,1,0,0);
     //calmp the camera to the player
     const camX = -player.locX + canvas.width/2;
     const camY = -player.locY + canvas.height/2;
     
-    orbs.forEach((orb)=>{
-        context.beginPath();
-        context.fillStyle = orb.color;
-        context.arc(orb.locX,orb.locY,orb.radius, 0, Math.PI*2);
-        context.fill();
-   });
 
     //translate allows us to move the canvas around
  
@@ -41,6 +37,12 @@ function draw(){
     context.strokeStyle = 'rgb(0,255,0)';
     context.stroke();
 
+    orbs.forEach((orb)=>{
+        context.beginPath();
+        context.fillStyle = orb.color;
+        context.arc(orb.locX,orb.locY,orb.radius, 0, Math.PI*2);
+        context.fill();
+   });
     //recursivly call function forever every new frame 
     requestAnimationFrame(draw);
 

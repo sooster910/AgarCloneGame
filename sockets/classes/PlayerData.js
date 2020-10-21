@@ -17,4 +17,4 @@ class PlayerData{
     }
 }
 
-module.defaults = PlayerData;
+module.exports = PlayerData;

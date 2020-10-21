@@ -1,13 +1,8 @@
 
-function init(){
-    draw();
-}
-
 player.locX = Math.floor(500*Math.random()+10);
 player.locY = Math.floor(500*Math.random()+10);
-function draw(){
 
- 
+function draw(){
 
 
    //reset the translation back to defualt;
@@ -49,9 +44,6 @@ function draw(){
 }
 
 canvas.addEventListener('mousemove',(e)=>{
-    console.log('moursemove', e)
-   
-
     const mousePosition={
         x:e.clientX,
         y:e.clientY

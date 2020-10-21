@@ -1,7 +1,11 @@
 const io = require('../server').io;
-
+const PlayerConfig = require('./classes/PlayerConfig');
+const PlayerData = require('./classes/PlayerData');
+const Player = require('./classes/Player');
 const Orb = require('./classes/Orb');
+
 let orbs = [];
+let players= [];
 let settings = {
     defaultObs : 500,
     defaultSpeed : 6,
@@ -12,27 +16,47 @@ let settings = {
     worldWidth:500,
     worldHeight:500
 }
-initGame()
+initGame();
+// setInterval(()=>{
+//     io.to('game').emit('tock', {
+//         players
+//     });
+// },33);
 
-io.sockets.on('connect', (socket) => {
+io.on('connection', (socket) => {
+
     //a player has connected
+    // Instead of immediately kicking off emitting orbs object first,
+    // we listen for init form client side
+    console.log('socket',socket)
+    socket.on('init',(data)=>{
+        console.log(' init data',data);
+        //add the player to the game namespace
+        socket.join('game');
+        
     //make a plyaerConfig object
-    let playerConfig = new PlayerConfig(settings );
-    //make a playerDataObject
-    let playerData = new PlayerData(null, settings);
-    //make a master player object to hold both
-    let player = new Player(socket.id, playerConfigm, playerData)
+        let playerConfig = new PlayerConfig(settings);
+        //make a playerDataObject
+        let playerData = new PlayerData(data.playerName, settings);
+        //make a master player object to hold both
+        let player = new Player(socket.id, playerConfig, playerData)
+     
+        socket.emit('initReturn', {
+            orbs
+        });
+      
+        players.push(playerData);
 
-    socket.emit('init', {
-        orbs
+
     });
 });
 
 // Render other random orbs on the background at the beginning of the game
 function initGame() {
     for(let i = 0; i < settings.defaultObs; i++) {
-        orbs.push(new Orb())
+        orbs.push(new Orb(settings))
     }
+    console.log('orbs',orbs)
 }
 
-module.exports = io;
+module.exports = io

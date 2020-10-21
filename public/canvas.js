@@ -23,14 +23,20 @@ function draw(){
  
     context.translate(camX, camY);
     
-    context.beginPath();
-    context.fillStyle='rgb(255,0,0)';
-    context.arc(player.locX,player.locY,10,0,Math.PI*2);
-    // context.arc(200,200,10,0,Math.PI*2);
-    context.fill();
-    context.lineWith=3;
-    context.strokeStyle = 'rgb(0,255,0)';
-    context.stroke();
+    console.log('players',players);
+    //droaw all player
+    players.forEach((player)=>{
+        context.beginPath();
+        context.fillStyle=player.color;
+        context.arc(player.locX,player.locY,10,0,Math.PI*2);
+        // context.arc(200,200,10,0,Math.PI*2);
+        context.fill();
+        context.lineWith=3;
+        context.strokeStyle = 'rgb(0,255,0)';
+        context.stroke();
+    })
+
+    //draw all orbs
 
     orbs.forEach((orb)=>{
         context.beginPath();
@@ -82,4 +88,4 @@ canvas.addEventListener('mousemove',(e)=>{
         player.locX += speed * xV;
         player.locY -= speed * yV;
     }    
-})
+});

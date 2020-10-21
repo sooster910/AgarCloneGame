@@ -17,11 +17,14 @@ let settings = {
     worldHeight:500
 }
 initGame();
-// setInterval(()=>{
-//     io.to('game').emit('tock', {
-//         players
-//     });
-// },33);
+
+//immediatly start 
+setInterval(()=>{
+   
+    io.to('game').emit('tock', {
+        players
+    });
+},33);
 
 io.on('connection', (socket) => {
 

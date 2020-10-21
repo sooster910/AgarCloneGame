@@ -15,10 +15,10 @@ function init(){
 
 // listen for init (where is emitting init ? socketMain.js from server)
 socket.on('initReturn',(data)=>{
-  
+  console.log('init return')
     orbs = data.orbs
 });
 
 socket.on('tock',(data)=>{
-    console.log('tock data',data)
+  players=data.players;
 })

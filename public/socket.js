@@ -15,10 +15,24 @@ function init(){
 
 // listen for init (where is emitting init ? socketMain.js from server)
 socket.on('initReturn',(data)=>{
-  console.log('init return')
+    
     orbs = data.orbs
+
+    console.log('player',player)
+    //every 33sec, 
+    if(player.xVector || player.yVector){
+        setInterval(()=>{
+            socket.emit('tick',{
+                xVector:player.xVector,
+                yVector:player.yVector
+            });
+        },33) 
+    }
 });
 
 socket.on('tock',(data)=>{
+    console.log('data',data)
   players=data.players;
+  player.locX = data.playerX
+  player.locY = data.playerY
 })

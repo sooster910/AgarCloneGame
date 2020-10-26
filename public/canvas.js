@@ -17,18 +17,19 @@ function draw(){
     //calmp the camera to the player
     const camX = -player.locX + canvas.width/2;
     const camY = -player.locY + canvas.height/2;
-    
+
+ 
 
     //translate allows us to move the canvas around
  
     context.translate(camX, camY);
     
-    console.log('players',players);
-    //droaw all player
-    players.forEach((player)=>{
+   
+    //draw all player
+    players.forEach((p)=>{
         context.beginPath();
-        context.fillStyle=player.color;
-        context.arc(player.locX,player.locY,10,0,Math.PI*2);
+        context.fillStyle=p.color;
+        context.arc(p.locX,p.locY,10,0,Math.PI*2);
         // context.arc(200,200,10,0,Math.PI*2);
         context.fill();
         context.lineWith=3;
@@ -37,7 +38,6 @@ function draw(){
     })
 
     //draw all orbs
-
     orbs.forEach((orb)=>{
         context.beginPath();
         context.fillStyle = orb.color;
@@ -50,42 +50,37 @@ function draw(){
 }
 
 canvas.addEventListener('mousemove',(e)=>{
+   
+   
     const mousePosition={
         x:e.clientX,
         y:e.clientY
     };
 
- 
+    
     const angleDeg = Math.atan2(mousePosition.y - (canvas.height/2), mousePosition.x - (canvas.width/2)) * 180 / Math.PI;
+
     if(angleDeg >= 0 && angleDeg < 90){
-        console.log('mouse is in the lower right quad')
+  
         xVector = 1 - (angleDeg/90);
         yVector = -(angleDeg/90);
+      
     }else if(angleDeg >= 90 && angleDeg <= 180){
         console.log('mouse is in the lower left quad')
         xVector = -(angleDeg-90)/90;
         yVector = -(1 - ((angleDeg-90)/90));
     }else if(angleDeg >= -180 && angleDeg < -90){
-        console.log('mouse is in the upper left quad')
+      
         xVector = (angleDeg+90)/90;
         yVector = (1 + ((angleDeg+90)/90));
     }else if(angleDeg < 0 && angleDeg >= -90){
-        console.log('mouse is in the upper right quad')
+    
         xVector = (angleDeg+90)/90;
         yVector = (1 - ((angleDeg+90)/90));
     }
-
-    speed = 10
-    xV = xVector;
-    yV = yVector;
-
-    //users trying to go off the page or players tryqing to go off of the grid. 
-    if((player.locX < 5 && player.xVector < 0) || (player.locX > 500) && (xV > 0)){
-        player.locY -= speed * yV;
-    }else if((player.locY < 5 && yV > 0) || (player.locY > 500) && (yV < 0)){
-        player.locX += speed * xV;
-    }else{
-        player.locX += speed * xV;
-        player.locY -= speed * yV;
-    }    
+    
+    player.xVector = xVector;
+    player.yVector = yVector;
+    
+  
 });

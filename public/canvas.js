@@ -51,15 +51,12 @@ function draw(){
 
 canvas.addEventListener('mousemove',(e)=>{
    
-   
     const mousePosition={
         x:e.clientX,
         y:e.clientY
     };
 
-    
     const angleDeg = Math.atan2(mousePosition.y - (canvas.height/2), mousePosition.x - (canvas.width/2)) * 180 / Math.PI;
-
     if(angleDeg >= 0 && angleDeg < 90){
   
         xVector = 1 - (angleDeg/90);

@@ -93,6 +93,14 @@ io.on('connection', (socket) => {
               }).catch((err) => {
                 console.log('no collision',err)
               })
+
+              //check player collision
+              let playerDeath = checkForPlayerCollisions(player.playerData, player.playerConfig,players);
+              playerDeath.then((data)=>{
+                    console.log('player collisionn')
+              }).catch((err)=>{
+                    console.log('err',err);
+              });
             }
           });
 

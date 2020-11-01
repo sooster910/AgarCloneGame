@@ -10,14 +10,14 @@ const {checkForOrbCollisions,checkForPlayerCollisions}= require('./checkCollisio
 let orbs = [];
 let players= [];
 let settings = {
-    defaultObs : 500,
+    defaultObs : 5000,
     defaultSpeed : 6,
     defaultSize: 6,
     //as player gets bigger, the zoom needs to go out
     //becuase once player gets really big, it's very possible for the orb to take up the whole screen. 
     defaultZoom: 1.5,
-    worldWidth:500,
-    worldHeight:500
+    worldWidth:5000,
+    worldHeight:5000
 }
 initGame();
 
@@ -65,20 +65,21 @@ io.on('connection', (socket) => {
  
         socket.on('tick', (data) => {
             console.log('tick data', data.xVector )
-            if (data.xVector && data.yVector) { //this is important
+            if (data.xVector || data.yVector) { //this is important
                 console.log('yes you have xVector')
                 speed = player.playerConfig.speed||0
               let xV = player.playerConfig.xVector = data.xVector
               let yV = player.playerConfig.yVector = data.yVector
          
-              if((player.playerData.locX < 5 && player.playerData.xVector < 0) || (player.playerData.locX > 500) && (xV > 0)){
+              if((player.playerData.locX < 5 && player.playerData.xVector < 0) || (player.playerData.locX > settings.worldWidth) && (xV > 0)){
                   player.playerData.locY -= speed * yV
-              }else if((player.playerData.locY < 5 && yV > 0) || (player.playerData.locY > 500) && (yV < 0)){
+              }else if((player.playerData.locY < 5 && yV > 0) || (player.playerData.locY > settings.worldHeight) && (yV < 0)){
                   player.playerData.locX += speed * xV
               }else{
                   player.playerData.locX += speed * xV
                   player.playerData.locY -= speed * yV
               } 
+              
               let capturedOrb = checkForOrbCollisions(player.playerData, player.playerConfig, orbs, settings)
               capturedOrb.then((data)=>{
                     const orbData = {
@@ -87,7 +88,7 @@ io.on('connection', (socket) => {
 
                     }
                     //emit to all sockets the orb to replace
-                    socket.emit('orbColision',orbData )
+                    socket.emit('orbCollision',orbData )
                     console.log('collision');
               }).catch((err) => {
                 console.log('no collision',err)

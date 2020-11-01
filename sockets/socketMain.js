@@ -3,8 +3,8 @@ const PlayerConfig = require('./classes/PlayerConfig');
 const PlayerData = require('./classes/PlayerData');
 const Player = require('./classes/Player');
 const Orb = require('./classes/Orb');
-const checkForOrbCollisions = require('./checkCollisions')
-const checkForPlayerCollisions = require('./checkCollisions');
+const {checkForOrbCollisions,checkForPlayerCollisions}= require('./checkCollisions')
+
 
 
 let orbs = [];
@@ -67,7 +67,7 @@ io.on('connection', (socket) => {
             console.log('tick data', data.xVector )
             if (data.xVector && data.yVector) { //this is important
                 console.log('yes you have xVector')
-                speed = player.playerConfig.speed
+                speed = player.playerConfig.speed||0
               let xV = player.playerConfig.xVector = data.xVector
               let yV = player.playerConfig.yVector = data.yVector
          
@@ -81,9 +81,16 @@ io.on('connection', (socket) => {
               } 
               let capturedOrb = checkForOrbCollisions(player.playerData, player.playerConfig, orbs, settings)
               capturedOrb.then((data)=>{
+                    const orbData = {
+                        orbIndex : data,
+                        newOrb:orbs[data],
+
+                    }
+                    console.log('orbData',orbData);
                     
+                    console.log('collision');
               }).catch((err) => {
-                console.log('err',err)
+                console.log('no collision',err)
               })
             }
           });

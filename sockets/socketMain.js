@@ -86,8 +86,8 @@ io.on('connection', (socket) => {
                         newOrb:orbs[data],
 
                     }
-                    console.log('orbData',orbData);
-                    
+                    //emit to all sockets the orb to replace
+                    socket.emit('orbColision',orbData )
                     console.log('collision');
               }).catch((err) => {
                 console.log('no collision',err)

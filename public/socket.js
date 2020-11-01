@@ -34,4 +34,9 @@ socket.on('tock',(data)=>{
   players=data.players;
   player.locX = data.playerX
   player.locY = data.playerY
+});
+
+socket.on('orbCollision',(data)=>{
+    orbs.splice(data.orbIndex,'1',data.newOrb);
+    console.log('orbSwitch',data);
 })

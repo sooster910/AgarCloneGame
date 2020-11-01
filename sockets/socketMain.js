@@ -3,6 +3,9 @@ const PlayerConfig = require('./classes/PlayerConfig');
 const PlayerData = require('./classes/PlayerData');
 const Player = require('./classes/Player');
 const Orb = require('./classes/Orb');
+const checkForOrbCollisions = require('./checkCollisions')
+const checkForPlayerCollisions = require('./checkCollisions');
+
 
 let orbs = [];
 let players= [];
@@ -24,8 +27,10 @@ io.on('connection', (socket) => {
     //a player has connected
     // Instead of immediately kicking off emitting orbs object first,
     // we listen for init form client side
-    console.log('socket',socket)
+    console.log('server socket connected')
     socket.on('init',(data)=>{
+        console.log('init on',data)
+        console.log('init on ')
         //add the player to the game namespace
         socket.join('game');
     //make a plyaerConfig object
@@ -40,13 +45,14 @@ io.on('connection', (socket) => {
        
         //게임 시작하자 마자
         setInterval(() => {
-            if(player.tickSent){
+
+            // if(player.tickSent){
               io.to('game').emit('tock', {
                 players,
                 playerX: player.playerData.locX,
                 playerY: player.playerData.locY,
               });
-            }
+            //}
           }, 33)
 
         socket.emit('initReturn', {
@@ -56,31 +62,33 @@ io.on('connection', (socket) => {
     });
 
     //the server sent over the tick, that means we know what direction to move the socket
-    socket.on('tick',(data)=>{
-        console.log('ticktick')
-        player.tickSent = true;
-        speed = player && player.playerConfig.speed;
-        //update the playerConfig obejct with the new direction in data
-        xV = player.playerConfig.xVector = data.xVector;
-        yV = player.playerConfig.yVector = data.yVector;
+ 
+        socket.on('tick', (data) => {
+            console.log('tick data', data.xVector )
+            if (data.xVector && data.yVector) { //this is important
+                console.log('yes you have xVector')
+                speed = player.playerConfig.speed
+              let xV = player.playerConfig.xVector = data.xVector
+              let yV = player.playerConfig.yVector = data.yVector
+         
+              if((player.playerData.locX < 5 && player.playerData.xVector < 0) || (player.playerData.locX > 500) && (xV > 0)){
+                  player.playerData.locY -= speed * yV
+              }else if((player.playerData.locY < 5 && yV > 0) || (player.playerData.locY > 500) && (yV < 0)){
+                  player.playerData.locX += speed * xV
+              }else{
+                  player.playerData.locX += speed * xV
+                  player.playerData.locY -= speed * yV
+              } 
+              let capturedOrb = checkForOrbCollisions(player.playerData, player.playerConfig, orbs, settings)
+              capturedOrb.then((data)=>{
+                    
+              }).catch((err) => {
+                console.log('err',err)
+              })
+            }
+          });
 
-        console.log('xV',xV)
-        console.log('yV',yV)
-      
-        //users trying to go off the page or players tryqing to go off of the grid. 
-        if((player.playerData.locX < 5 && player.playerData.xVector < 0) || (player.playerData.locX > 500) && (xV > 0)){
-            player.playerData.locY -= speed * yV;
-        }else if((player.playerData.locY < 5 && yV > 0) || (player.playerData.locY > 500) && (yV < 0)){
-            player.playerData.locX += speed * xV;
-        }else{
-            player.playerData.locX += speed * xV;
-            player.playerData.locY -= speed * yV;
-           
-        }  
-        
-    })
-   
-});
+        });
 
 // Render other random orbs on the background at the beginning of the game
 function initGame() {

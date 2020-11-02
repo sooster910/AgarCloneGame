@@ -10,18 +10,25 @@ const {checkForOrbCollisions,checkForPlayerCollisions}= require('./checkCollisio
 let orbs = [];
 let players= [];
 let settings = {
-    defaultObs : 5000,
+    defaultObs : 500,
     defaultSpeed : 6,
     defaultSize: 6,
     //as player gets bigger, the zoom needs to go out
     //becuase once player gets really big, it's very possible for the orb to take up the whole screen. 
     defaultZoom: 1.5,
-    worldWidth:5000,
-    worldHeight:5000
+    worldWidth:500,
+    worldHeight:500
 }
 initGame();
 
+setInterval(() => {
 
+    if(players.length>0){
+      io.to('game').emit('tock', {
+        players,
+      });
+    }
+  }, 33)
 io.on('connection', (socket) => {
     let player;
     //a player has connected
@@ -47,8 +54,7 @@ io.on('connection', (socket) => {
         setInterval(() => {
 
             // if(player.tickSent){
-              io.to('game').emit('tock', {
-                players,
+              socket.emit('tickTock', {
                 playerX: player.playerData.locX,
                 playerY: player.playerData.locY,
               });
@@ -67,7 +73,7 @@ io.on('connection', (socket) => {
             console.log('tick data', data.xVector )
             if (data.xVector || data.yVector) { //this is important
                 console.log('yes you have xVector')
-                speed = player.playerConfig.speed||0
+                speed = player&& player.playerConfig &&player.playerConfig.speed
               let xV = player.playerConfig.xVector = data.xVector
               let yV = player.playerConfig.yVector = data.yVector
          
@@ -85,7 +91,6 @@ io.on('connection', (socket) => {
                     const orbData = {
                         orbIndex : data,
                         newOrb:orbs[data],
-
                     }
                     //emit to all sockets the orb to replace
                     socket.emit('orbCollision',orbData )

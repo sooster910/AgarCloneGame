@@ -10,14 +10,14 @@ const {checkForOrbCollisions,checkForPlayerCollisions}= require('./checkCollisio
 let orbs = [];
 let players= [];
 let settings = {
-    defaultObs : 500,
+    defaultObs : 5000,
     defaultSpeed : 6,
     defaultSize: 6,
     //as player gets bigger, the zoom needs to go out
     //becuase once player gets really big, it's very possible for the orb to take up the whole screen. 
     defaultZoom: 1.5,
-    worldWidth:500,
-    worldHeight:500
+    worldWidth:5000,
+    worldHeight:5000
 }
 initGame();
 
@@ -92,6 +92,8 @@ io.on('connection', (socket) => {
                         orbIndex : data,
                         newOrb:orbs[data],
                     }
+                    //update updateleaderBoard
+                    socket.emit('updateleaderBoard',updateleaderBoard());
                     //emit to all sockets the orb to replace
                     socket.emit('orbCollision',orbData )
                     console.log('collision');
@@ -100,9 +102,12 @@ io.on('connection', (socket) => {
               })
 
               //check player collision
-              let playerDeath = checkForPlayerCollisions(player.playerData, player.playerConfig,players);
+              let playerDeath = checkForPlayerCollisions(player.playerData, player.playerConfig,players,player.socketId);
               playerDeath.then((data)=>{
+
                     console.log('player collisionn')
+                    socket.emit('updateleaderBoard',updateleaderBoard());
+
               }).catch((err)=>{
                     console.log('err',err);
               });
@@ -119,4 +124,18 @@ function initGame() {
 
 }
 
+function updateleaderBoard(){
+  //sort player descending order
+  players.sort((a,b)=>{
+    return b.score- a.score
+  });
+
+  let scoreBoard = players.map((curPlayer)=>{
+    return{
+      name:curPlayer.name,
+      score: curPlayer.score
+    }
+  })
+  return scoreBoard;
+}
 module.exports = io

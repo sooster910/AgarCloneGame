@@ -45,11 +45,11 @@ socket.on('tickTock', (data)=>{
     player.locY = data.playerY
 });
 
-socket.on('updateScoreBoard',(data)=>{
-    console.log('updateScoreBoard',data)
+socket.on('updateleaderBoard',(data)=>{
+    console.log('updateleaderBoard',data)
     document.querySelector('.leader-board').innerHTML = "";
     data.forEach((curPlayer)=>{
         document.querySelector('.leader-board').innerHTML+= `<li class="leaderboard-player">${curPlayer.name} - ${curPlayer.score}</li>`
     });
-    
+
 })

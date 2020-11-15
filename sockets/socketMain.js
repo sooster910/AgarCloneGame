@@ -39,7 +39,7 @@ io.on('connection', (socket) => {
     player = new Player(socket.id, playerConfig, playerData);
 
     player.tickSent = false;
-    
+
     setInterval(() => {
       socket.emit('tickTock', {
         playerX: player.playerData.locX,
@@ -73,6 +73,7 @@ io.on('connection', (socket) => {
       }
 
       let capturedOrb = checkForOrbCollisions(player.playerData, player.playerConfig, orbs, settings)
+      
       capturedOrb.then((data) => {
         const orbData = {
           orbIndex: data,

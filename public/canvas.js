@@ -2,7 +2,7 @@
 player.locX = Math.floor(500*Math.random()+10);
 player.locY = Math.floor(500*Math.random()+10);
 
-function draw(){
+function draw(t){
 
 
    //reset the translation back to defualt;
@@ -23,18 +23,24 @@ function draw(){
     
     //draw all player
     players.forEach((p)=>{
-        context.beginPath();
-        context.fillStyle=p.color;
-        context.arc(p.locX,p.locY,p.radius,0,Math.PI*2);
-        context.fill();
-        context.lineWith=3;
-        context.strokeStyle = 'rgb(0,255,0)';
-        context.stroke();
-        context = canvas.getContext("2d");
-        context.font = `${p.radius}px Comic Sans MS`;
-        context.fillStyle = 'white';
-        context.textAlign = 'center';
-        context.fillText('amit', p.locX, p.locY,);
+            console.log('p',p);
+            const playerOrbObj = new playerOrb(p); 
+            console.log('playerOrb',playerOrbObj)
+            playerOrbObj.draw(context, t) 
+        // context.beginPath();
+        // context.fillStyle=p.color;
+
+        // context.arc(p.locX,p.locY,p.radius,0,Math.PI*2); //this will be replaced
+     
+        // context.fill();
+        // context.lineWith=3;
+        // context.strokeStyle = 'rgb(0,255,0)';
+        // context.stroke();
+        // context = canvas.getContext("2d");
+        // context.font = `${p.radius}px Comic Sans MS`;
+        // context.fillStyle = 'white';
+        // context.textAlign = 'center';
+        // context.fillText('amit', p.locX, p.locY,);
     })
 
     //draw all orbs
@@ -81,3 +87,5 @@ canvas.addEventListener('mousemove',(e)=>{
     
   
 });
+
+

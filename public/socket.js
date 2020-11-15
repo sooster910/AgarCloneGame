@@ -1,5 +1,3 @@
-//create the connection to server 
-//io is coming from socket.io cdn
 let socket = io.connect('http://localhost:8080');
 
 console.log('socket',socket)
@@ -7,7 +5,6 @@ console.log('socket',socket)
 //init gets called once the user clicks start button 
 function init(){
     draw(); //draw is reculsive
-    // console.log('player',player)
     socket.emit('init',{
         playerName:player.name
     });
@@ -19,7 +16,6 @@ socket.on('initReturn',(data)=>{
     orbs = data.orbs
     //every 0.033 sec, 
         setInterval(()=>{
-
         if(player.xVector && player.yVector){
             socket.emit('tick',{
                 xVector:player.xVector,
@@ -37,7 +33,6 @@ socket.on('tock',(data)=>{
 
 socket.on('orbCollision',(data)=>{
     orbs.splice(data.orbIndex,'1',data.newOrb);
-    console.log('orbSwitch',data);
 });
 
 socket.on('tickTock', (data)=>{
@@ -46,10 +41,19 @@ socket.on('tickTock', (data)=>{
 });
 
 socket.on('updateleaderBoard',(data)=>{
-    console.log('updateleaderBoard',data)
     document.querySelector('.leader-board').innerHTML = "";
     data.forEach((curPlayer)=>{
         document.querySelector('.leader-board').innerHTML+= `<li class="leaderboard-player">${curPlayer.name} - ${curPlayer.score}</li>`
     });
 
-})
+});
+
+socket.on('playerDeath',(data)=>{
+     console.log('playerDeath',data);
+     document.querySelector("#game-message").innerHTML = `${data.died.name} absorbed by ${data.killedBy.name}`;
+     $("#game-message").css({"background-color":"#00e6e6","opacity":"1"});
+     $("#game-message").show();
+     $("#game-message").fadeOut(5000)
+   
+
+});

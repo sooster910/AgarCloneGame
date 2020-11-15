@@ -10,7 +10,7 @@ const Orb = require('./classes/Orb')
  */
 
 
-function checkForOrbCollisions(pData,pConfig, orbs, settings){
+function checkForOrbCollisions(pData, pConfig, orbs, settings){
     return new Promise((resolve, reject)=>{
         //ORB COLLISIONS
         orbs.forEach((orb,i)=>{

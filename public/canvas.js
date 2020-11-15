@@ -8,7 +8,7 @@ function draw(){
    //reset the translation back to defualt;
     context.setTransform(1,0,0,1,0,0);
 
-        //FIX:ONE 
+    //FIX:ONE 
     //wipe the entire canvas out     
     //every time we draw new frame, we are going to wipe everything out we start 
     //clear the screen out so the old stuff is gone from the last frame. 
@@ -18,30 +18,30 @@ function draw(){
     const camX = -player.locX + canvas.width/2;
     const camY = -player.locY + canvas.height/2;
 
- 
-
     //translate allows us to move the canvas around
- 
     context.translate(camX, camY);
     
-   
     //draw all player
     players.forEach((p)=>{
         context.beginPath();
         context.fillStyle=p.color;
         context.arc(p.locX,p.locY,p.radius,0,Math.PI*2);
-        // context.arc(200,200,10,0,Math.PI*2);
         context.fill();
         context.lineWith=3;
         context.strokeStyle = 'rgb(0,255,0)';
         context.stroke();
+        context = canvas.getContext("2d");
+        context.font = `${p.radius}px Comic Sans MS`;
+        context.fillStyle = 'white';
+        context.textAlign = 'center';
+        context.fillText('amit', p.locX, p.locY,);
     })
 
     //draw all orbs
     orbs.forEach((orb)=>{
         context.beginPath();
         context.fillStyle = orb.color;
-        context.arc(orb.locX,orb.locY,orb.radius, 0, Math.PI*2);
+        context.arc(orb.locX, orb.locY, orb.radius, 0, Math.PI*2);
         context.fill();
    });
     //recursivly call function forever every new frame 
